@@ -21,7 +21,7 @@ RUN npm install --omit=dev
 COPY python_rag/requirements.txt ./python_rag/
 
 # Install Python dependencies
-RUN pip3 install --no-cache-dir -r python_rag/requirements.txt
+RUN pip3 install --no-cache-dir --break-system-packages -r python_rag/requirements.txt
 
 # Copy application code
 COPY . .
