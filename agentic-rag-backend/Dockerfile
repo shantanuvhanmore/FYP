@@ -11,11 +11,11 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy package files (including package-lock.json)
+COPY package.json package-lock.json ./
 
 # Install Node.js dependencies (production only)
-RUN npm ci --only=production --ignore-scripts
+RUN npm install --omit=dev --ignore-scripts
 
 # Copy Python requirements
 COPY python_rag/requirements.txt ./python_rag/
