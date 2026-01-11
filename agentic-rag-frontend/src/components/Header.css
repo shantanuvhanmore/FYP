@@ -1,0 +1,122 @@
+.main-header {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-bottom: 3px solid #6366f1;
+    padding: 10px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-left {
+    flex: 0 0 120px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hamburger-btn {
+    background: transparent;
+    border: none;
+    color: #4b5563;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.hamburger-btn:hover {
+    background: #f3f4f6;
+    color: #6366f1;
+}
+
+.header-right {
+    flex: 0 0 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.header-center {
+    flex: 1;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.college-name-main {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e40af;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.college-name-full {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e3a8a;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.college-department {
+    font-size: 14px;
+    font-weight: 700;
+    color: #dc2626;
+    letter-spacing: 0.5px;
+}
+
+.college-subtitle {
+    font-size: 11px;
+    color: #dc2626;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.autonomous {
+    color: #dc2626;
+}
+
+.separator {
+    margin: 0 8px;
+    color: #6b7280;
+}
+
+.support {
+    color: #dc2626;
+}
+
+.accreditation {
+    font-size: 10px;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .header-left,
+    .header-right {
+        margin-bottom: 10px;
+    }
+
+    .college-name-full {
+        font-size: 16px;
+    }
+
+    .college-name-main {
+        font-size: 15px;
+    }
+}
