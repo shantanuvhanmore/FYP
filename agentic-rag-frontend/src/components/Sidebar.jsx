@@ -5,7 +5,7 @@ import {
   FaPlus, FaSearch, FaFolder, FaShieldAlt, FaCog, FaSignOutAlt,
   FaChevronLeft, FaChevronRight, FaRegCommentDots, FaTrashAlt
 } from 'react-icons/fa';
-import './Sidebar.css';
+import './sidebar.css';
 
 export default function Sidebar({ isOpen = true, onToggle, currentConversationId, onSelectConversation, onNewChat }) {
   const { token, API_BASE, user, isAdmin, logout } = useAuth();
