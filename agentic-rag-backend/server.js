@@ -59,7 +59,7 @@ async function startServer() {
 
         // Start HTTP server
         const PORT = env.port;
-        server = app.listen(PORT, () => {
+        server = app.listen(PORT, '0.0.0.0', () => {
             logger.info('');
             logger.info('╔═══════════════════════════════════════════════════════════╗');
             logger.info('║                                                           ║');
