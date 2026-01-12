@@ -9,8 +9,8 @@ Complete guide for deploying the Agentic RAG frontend to Vercel.
 Before starting, ensure you have:
 
 - [ ] GitHub repository with your code
-- [ ] Backend deployed on Render (see `RENDER_DEPLOYMENT.md`)
-- [ ] Backend URL (e.g., `https://your-app.onrender.com`)
+- [ ] Backend deployed on Azure
+- [ ] Backend URL (e.g., `https://fyp-agentic-rag-h0bzeqd9b0a3ewck.centralindia-01.azurewebsites.net`)
 - [ ] Google OAuth Client ID
 - [ ] Vercel account (free tier available)
 
@@ -40,14 +40,14 @@ Before starting, ensure you have:
 Click **"Environment Variables"** and add:
 
 ```bash
-# Backend API URL (your Render backend URL)
-VITE_API_BASE=https://your-app-name.onrender.com
+# Backend API URL (your Azure backend URL)
+VITE_API_BASE=https://fyp-agentic-rag-h0bzeqd9b0a3ewck.centralindia-01.azurewebsites.net
 
 # Google OAuth Client ID
 VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 ```
 
-> **Important**: Make sure to use your actual Render backend URL!
+> **Important**: Make sure to use your actual Azure backend URL!
 
 ### 1.4 Deploy
 
@@ -59,16 +59,16 @@ VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 
 ## ✅ Step 2: Update Backend CORS
 
-After deployment, update your Render backend environment variable:
+After deployment, update your Azure backend environment variable:
 
-1. Go to Render Dashboard
-2. Select your backend service
-3. Go to **"Environment"**
-4. Update `FRONTEND_URL`:
-   ```bash
-   FRONTEND_URL=https://your-project.vercel.app
-   ```
-5. Save (this will trigger a redeploy)
+1. Go to **Azure Portal** -> Your Web App
+2. Select **Configuration** (under Settings)
+3. Go to **Application settings** tab
+4. Click **New application setting** (or edit existing `FRONTEND_URL`)
+5. Update `FRONTEND_URL`:
+   - Name: `FRONTEND_URL`
+   - Value: `https://your-project.vercel.app`
+6. Click **OK**, then **Save** at the top (this will restart the app)
 
 ---
 
@@ -109,7 +109,7 @@ Add your Vercel URL to Google OAuth:
 1. Open browser console (F12)
 2. Try guest login
 3. Check network tab for API calls
-4. Verify calls go to your Render backend
+4. Verify calls go to your Azure backend
 
 ### 4.3 Test Google OAuth
 
@@ -356,6 +356,6 @@ Already configured in `vite.config.js`:
 
 Your Agentic RAG chatbot is now live:
 - **Frontend**: `https://your-project.vercel.app`
-- **Backend**: `https://your-app-name.onrender.com`
+- **Backend**: `https://fyp-agentic-rag-h0bzeqd9b0a3ewck.centralindia-01.azurewebsites.net`
 
 Test all features and enjoy your deployed application!
