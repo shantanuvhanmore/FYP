@@ -28,10 +28,6 @@ jobs:
         cd agentic-rag-backend
         docker build -t agentic-rag-backend:${{ github.sha }} .
     
-    - name: 💾 Save Docker image
-      run: |
-        docker save agentic-rag-backend:${{ github.sha }} | gzip > backend-image.tar.gz
-    
     - name: 🚀 Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
