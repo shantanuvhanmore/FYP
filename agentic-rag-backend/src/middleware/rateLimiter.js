@@ -14,6 +14,16 @@ import env from '../config/environment.js';
  */
 
 /**
+ * Helper to get IP address without port
+ * Handles cases where Azure/Proxy sends IP:Port
+ */
+const getIp = (req) => {
+    const ip = req.ip || req.connection.remoteAddress;
+    // Remove port if present (e.g., "1.2.3.4:1234" -> "1.2.3.4")
+    return ip ? ip.split(':')[0] : ip;
+};
+
+/**
  * Auth rate limiter (5 requests per 10 minutes)
  */
 export const authLimiter = rateLimit({
@@ -22,9 +32,10 @@ export const authLimiter = rateLimit({
     message: 'Too many authentication attempts, please try again later',
     standardHeaders: true,
     legacyHeaders: false,
+    keyGenerator: getIp,
     handler: (req, res) => {
         logger.warn('Auth rate limit exceeded', {
-            ip: req.ip,
+            ip: getIp(req),
             path: req.path,
         });
 
@@ -49,9 +60,10 @@ export const generalLimiter = rateLimit({
     message: 'Too many requests from this IP, please try again later',
     standardHeaders: true,
     legacyHeaders: false,
+    keyGenerator: getIp,
     handler: (req, res) => {
         logger.warn('Rate limit exceeded', {
-            ip: req.ip,
+            ip: getIp(req),
             path: req.path,
         });
 
@@ -80,9 +92,10 @@ export const strictLimiter = rateLimit({
     message: 'Too many chat requests, please slow down',
     standardHeaders: true,
     legacyHeaders: false,
+    keyGenerator: getIp,
     handler: (req, res) => {
         logger.warn('Strict rate limit exceeded', {
-            ip: req.ip,
+            ip: getIp(req),
             path: req.path,
             userId: req.body?.userId,
         });
@@ -110,11 +123,11 @@ export const adminLimiter = rateLimit({
     legacyHeaders: false,
     keyGenerator: (req) => {
         // Use user ID for authenticated admin requests (future)
-        return req.user?.id || req.ip;
+        return req.user?.id || getIp(req);
     },
     handler: (req, res) => {
         logger.warn('Admin rate limit exceeded', {
-            ip: req.ip,
+            ip: getIp(req),
             userId: req.user?.id,
             path: req.path,
         });
@@ -143,6 +156,7 @@ export const createRateLimiter = (options = {}) => {
         message: options.message || 'Too many requests',
         standardHeaders: true,
         legacyHeaders: false,
+        keyGenerator: getIp,
         ...options,
     });
 };
