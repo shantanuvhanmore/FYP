@@ -284,7 +284,7 @@ class PythonBridge {
      */
     async healthCheck() {
         try {
-            const testQuery = 'test';
+            const testQuery = 'where to check scholarship status on mahadbt website';
             const result = await this.executeQuery(testQuery, 'health-check');
 
             return result.success === true;

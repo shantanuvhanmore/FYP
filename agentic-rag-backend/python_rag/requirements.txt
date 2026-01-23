@@ -4,4 +4,3 @@ python-dotenv
 pymongo
 sentence-transformers
 tavily-python
-requests

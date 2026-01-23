@@ -19,11 +19,10 @@ from typing import List, Dict, Optional
 from pymongo import MongoClient
 from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
-import requests
-import time
 
 load_dotenv()
 logger = logging.getLogger(__name__)
+
 
 
 class Retriever:
@@ -64,15 +63,9 @@ class Retriever:
             
             # Initialize embedding model
             if embedding_model is None:
-                hf_api_key = os.getenv("HF_API_KEY")
-                if hf_api_key:
-                    logger.info("Using Hugging Face Inference API for embeddings")
-                    self.embedding_model = HuggingFaceEmbeddingClient(api_key=hf_api_key)
-                else:
-                    logger.info("Using local SentenceTransformer for embeddings")
-                    logger.debug("Loading embedding model: all-MiniLM-L6-v2")
-                    self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-                    logger.debug("Embedding model loaded")
+                logger.debug("Loading embedding model: all-MiniLM-L6-v2")
+                self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+                logger.debug("Embedding model loaded")
             else:
                 self.embedding_model = embedding_model
                 logger.debug("Using injected embedding model")
@@ -83,53 +76,7 @@ class Retriever:
             logger.error(f"Failed to initialize Retriever: {e}", exc_info=True)
             raise
 
-class HuggingFaceEmbeddingClient:
-    """
-    Client for Hugging Face Inference API compatibility with SentenceTransformer.
-    """
-    def __init__(self, api_key: str, model_id: str = "sentence-transformers/all-MiniLM-L6-v2"):
-        self.api_url = f"https://api-inference.huggingface.co/models/{model_id}"
-        self.headers = {"Authorization": f"Bearer {api_key}"}
-        
-    def encode(self, text: str) -> List[float]:
-        """
-        Generate embedding for text using Hugging Face API.
-        
-        Args:
-            text: Input text
-            
-        Returns:
-            Embedding vector as list of floats
-        """
-        retries = 3
-        for i in range(retries):
-            try:
-                response = requests.post(
-                    self.api_url, 
-                    headers=self.headers, 
-                    json={"inputs": text, "options": {"wait_for_model": True}}
-                )
-                
-                if response.status_code == 200:
-                    return response.json()
-                else:
-                    error = response.json()
-                    logger.warning(f"HF API Error (Attempt {i+1}/{retries}): {error}")
-                    if "estimated_time" in error:
-                        wait_time = error["estimated_time"]
-                        logger.info(f"Model loading, waiting {wait_time}s...")
-                        time.sleep(wait_time)
-                        continue
-                        
-            except Exception as e:
-                logger.error(f"HF API Connection Failed: {e}")
-                
-            time.sleep(1)
-            
-        # Fallback if API fails
-        logger.error("All HF API retries failed. Falling back to zero vector (emergency).")
-        return [0.0] * 384  # Dimension for all-MiniLM-L6-v2
-    
+
     def vector_search(
         self, 
         query: str, 
@@ -151,7 +98,13 @@ class HuggingFaceEmbeddingClient:
         
         try:
             # Generate query embedding
-            query_embedding = self.embedding_model.encode(query).tolist()
+            embedding_response = self.embedding_model.encode(query)
+            # Check if it's already a list (from HF client) or numpy array (from output of SentenceTransformer)
+            if isinstance(embedding_response, list):
+                query_embedding = embedding_response
+            else:
+                query_embedding = embedding_response.tolist()
+                
             logger.debug(f"Generated embedding vector (dim={len(query_embedding)})")
             
             # Build aggregation pipeline

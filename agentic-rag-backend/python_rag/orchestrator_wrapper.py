@@ -33,6 +33,7 @@ logging.basicConfig(
     format='%(asctime)s [%(levelname)s] %(message)s',
     handlers=[
         logging.FileHandler(log_file),
+        logging.StreamHandler(sys.stderr) #line will display the log in the console of azure 
     ]
 )
 
