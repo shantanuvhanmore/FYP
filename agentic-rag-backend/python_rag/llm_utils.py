@@ -15,7 +15,7 @@ import json
 import logging
 from typing import Dict, List
 from openai import OpenAI
-import google.generativeai as genai
+# import google.generativeai as genai
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -47,13 +47,13 @@ class LLMManager:
                 self.model = "gpt-4o-mini"
                 logger.debug(f"OpenAI client initialized with model: {self.model}")
                 
-            elif provider == "gemini":
-                api_key = os.getenv("GEMINI_API_KEY")
-                if not api_key:
-                    raise ValueError("GEMINI_API_KEY not found")
-                genai.configure(api_key=api_key)
-                self.model = genai.GenerativeModel('gemini-pro')
-                logger.debug("Gemini client initialized")
+            # elif provider == "gemini":
+            #     api_key = os.getenv("GEMINI_API_KEY")
+            #     if not api_key:
+            #         raise ValueError("GEMINI_API_KEY not found")
+            #     genai.configure(api_key=api_key)
+            #     self.model = genai.GenerativeModel('gemini-pro')
+            #     logger.debug("Gemini client initialized")
                 
             else:
                 raise ValueError(f"Unsupported provider: {provider}")
@@ -136,9 +136,9 @@ Response: {{"fees_payment": "Paying College Fees in Installments", "studentporta
                 )
                 result = response.choices[0].message.content.strip()
                 
-            elif self.provider == "gemini":
-                response = self.model.generate_content(prompt)
-                result = response.text.strip()
+            # elif self.provider == "gemini":
+            #     response = self.model.generate_content(prompt)
+            #     result = response.text.strip()
             
             logger.debug(f"LLM response: {result}")
             
@@ -239,9 +239,9 @@ Response: {{"fees_payment": "Paying College Fees in Installments", "studentporta
                 )
                 answer = response.choices[0].message.content.strip()
                 
-            elif self.provider == "gemini":
-                response = self.model.generate_content(prompt)
-                answer = response.text.strip()
+            # elif self.provider == "gemini":
+            #     response = self.model.generate_content(prompt)
+            #     answer = response.text.strip()
             
             logger.debug(f"Synthesized answer length: {len(answer)} chars")
             return answer
